@@ -35,16 +35,16 @@ void Menu::mainMenu()
 		case 1:
 			system("cls");
 			fileChoice();
-			system("cls");
+		//	system("cls");
 		//	graph.display();	//wyswietlenie grafu
-			cin.get();			//zabezpieczenie przez zniknieciem danych z konsoli
-			cin.get();
+		//	cin.get();			//zabezpieczenie przez zniknieciem danych z konsoli
+		//	cin.get();
 			break;
 		case 2:
 			system("cls");
-			graph.display();
-			cin.get();
-			cin.get();
+		//	graph.display();
+		//	cin.get();
+		//	cin.get();
 			break;
 		case 3:
 			system("cls");

@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include "AnnealingSimulation.h"
 
 
 using namespace std;
@@ -20,37 +21,37 @@ void Menu::mainMenu()
 {
 	bool progWork = true;	//zmienna logiczna, ktora odpowiada za dzialanie badz wylaczenie programu
 	int choise;	//numer, ktory wprowadza uzytkownik w momencie wyboru
-
 	do {
 		system("cls");
 		cout << "[1] Wczytaj dane z pliku." << endl
 			<< "[2] Wprowadz kryterium stopu." << endl
 			<< "[3] Wybor sasiedztwa dla TS." << endl
 			<< "[4] Uruchomienie algorytmu TS." << endl
-			<< "[5] Ustawienie wspolczynnika zmiany temperatury sla SW." << endl
-			<< "[6] Uruchomienie algorytmu SW." << endl;
+			<< "[5] Ustawienie wspolczynnika zmiany temperatury dla SW." << endl
+			<< "[6] Uruchomienie algorytmu SW." << endl
+			<< "[7] Wyjscie z programu";
 		cin >> choise;
 		switch (choise)
 		{
 		case 1:
 			system("cls");
 			fileChoice();
-		//	system("cls");
-		//	graph.display();	//wyswietlenie grafu
-		//	cin.get();			//zabezpieczenie przez zniknieciem danych z konsoli
-		//	cin.get();
+			//	system("cls");
+			//	graph.display();	//wyswietlenie grafu
+			//	cin.get();			//zabezpieczenie przez zniknieciem danych z konsoli
+			//	cin.get();
 			break;
 		case 2:
 			system("cls");
-		//	graph.display();
-		//	cin.get();
-		//	cin.get();
+			//	graph.display();
+			//	cin.get();
+			//	cin.get();
 			break;
 		case 3:
 			system("cls");
 			if (graph.getVertices() != 0)
 			{
-	
+
 			}
 			else
 				cout << "Graf jest pusty, nie mozna przeprowadzic wybranej operacji!" << endl;
@@ -61,7 +62,7 @@ void Menu::mainMenu()
 			system("cls");
 			if (graph.getVertices() != 0)
 			{
-		
+
 			}
 			else
 				cout << "Graf jest pusty, nie mozna przeprowadzic wybranej oepracji!" << endl;
@@ -69,8 +70,20 @@ void Menu::mainMenu()
 			cin.get();
 			break;
 		case 5:
+			system("cls");
+			if (graph.getVertices() != 0)
+				if (annealing.getTemperatureChangeCoefficient() != NULL)
+					annealing.simulation();
+				else
+					cout << "Wspolczynnik wyzarzania nie zostal podany! Podaj go i dopiero uruchom algorytm." << endl;
+			else
+				cout << "Graf jest pusty, nie mozna przeprowadzic wybranej oepracji!" << endl;
+
 			break;
 		case 6:
+			coefficientSetting();
+			break;
+		case 7:
 			progWork = false;
 			break;
 		default:
@@ -154,4 +167,12 @@ void Menu::fileChoice()
 	default:
 		break;
 	}
+}
+
+void Menu::coefficientSetting()
+{
+	int number;
+	cout << "Jaki wspolczynnik wyzarzania chcialbys ustawic?" << endl;
+	cin >> number;
+	annealing.setTemperatureChangeCoefficient(number);
 }

@@ -12,7 +12,6 @@ Menu::Menu()
 {
 }
 
-
 Menu::~Menu()
 {
 }
@@ -29,7 +28,7 @@ void Menu::mainMenu()
 			<< "[4] Uruchomienie algorytmu TS." << endl
 			<< "[5] Ustawienie wspolczynnika zmiany temperatury dla SW." << endl
 			<< "[6] Uruchomienie algorytmu SW." << endl
-			<< "[7] Wyjscie z programu";
+			<< "[7] Wyjscie z programu" << endl;
 		cin >> choise;
 		switch (choise)
 		{
@@ -70,18 +69,27 @@ void Menu::mainMenu()
 			cin.get();
 			break;
 		case 5:
-			system("cls");
-			if (graph.getVertices() != 0)
-				if (annealing.getTemperatureChangeCoefficient() != NULL)
-					annealing.simulation();
-				else
-					cout << "Wspolczynnik wyzarzania nie zostal podany! Podaj go i dopiero uruchom algorytm." << endl;
-			else
-				cout << "Graf jest pusty, nie mozna przeprowadzic wybranej oepracji!" << endl;
-
+			coefficientSetting();
 			break;
 		case 6:
-			coefficientSetting();
+			system("cls");
+			annealing.setGraph(graph);
+			if (graph.getVertices() != 0)
+				if (annealing.getCoolingCoefficient() != NULL)
+				{
+					annealing.simulation();
+					displayHamilton(annealing.getPathCost(), annealing.getPath());
+					cin.get();
+					cin.get();
+				}
+				else
+				{
+					cout << "Wspolczynnik zmiany temperatury nie zostal podany! Podaj go i dopiero uruchom algorytm." << endl;
+					cin.get();
+					cin.get();
+				}
+			else
+				cout << "Graf jest pusty, nie mozna przeprowadzic wybranej oepracji!" << endl;
 			break;
 		case 7:
 			progWork = false;
@@ -151,7 +159,8 @@ void Menu::fileChoice()
 	cout << "Jaki plik chcialbys otworzyc?" << endl
 		<< "[1] ftv47.atsp" << endl
 		<< "[2] ftv170.atsp" << endl
-		<< "[3] rbg403.atsp" << endl;
+		<< "[3] rbg403.atsp" << endl
+		<< "[4] tsp_15.txt" << endl;
 	cin >> choise;
 	switch (choise)
 	{
@@ -164,6 +173,9 @@ void Menu::fileChoice()
 	case 3:
 		graph.createGiven("rbg403.atsp", 403);
 		break;
+	case 4:
+		graph.createGiven("tsp_15.txt");
+		break;
 	default:
 		break;
 	}
@@ -171,8 +183,8 @@ void Menu::fileChoice()
 
 void Menu::coefficientSetting()
 {
-	int number;
-	cout << "Jaki wspolczynnik wyzarzania chcialbys ustawic?" << endl;
+	float number;
+	cout << "Jaki wspolczynnik zmiany temperatury chcialbys ustawic?" << endl;
 	cin >> number;
-	annealing.setTemperatureChangeCoefficient(number);
+	annealing.setCoolingCoefficient(number);
 }

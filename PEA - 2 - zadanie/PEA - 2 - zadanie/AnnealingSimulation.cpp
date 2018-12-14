@@ -1,11 +1,12 @@
 #include "AnnealingSimulation.h"
 #include <algorithm>
+//#include <iostream>
 
 
 AnnealingSimulation::AnnealingSimulation()
 {
+	startTemperature = 10;
 }
-
 
 AnnealingSimulation::~AnnealingSimulation()
 {
@@ -13,25 +14,37 @@ AnnealingSimulation::~AnnealingSimulation()
 
 void AnnealingSimulation::simulation()
 {
-	bool whileStop = false;
+	//bool whileStop = false;
 	std::vector<int> permutation = getPermutation();	//inicjalizacja losowej œcie¿ki pocz¹tkowej jako wektora intów
-	float temperature = startTemperature();			//obliczenie temperatury startowej
-	int step = 0;		//inicjalizacja licznika kroków - pocz¹tkowo 0
-	path = permutation;
-	pathCost = calculatePathCost(permutation);
+	float temperature = static_cast<float>(startTemperature);			//obliczenie temperatury startowej
+	//int step = 0;		//inicjalizacja licznika kroków - pocz¹tkowo 0
+	std::vector<int> bestPath = permutation;
+	int minimalCost = calculatePathCost(permutation);
 	do
 	{
-		for(int i = 0; i < temperatureChangeCoefficient; i++)
+		
+		for(int i = 0; i < graph.getVertices(); i++)
 		{
 			std::vector<int> neighbour = generateNeighbour(permutation);
-			
+			int currentCost = calculatePathCost(neighbour);
+			if (currentCost <= minimalCost)
+			{
+				permutation = neighbour;
+				minimalCost = currentCost;
+			}
+			else if(exp(minimalCost-currentCost)/temperature > 0.4747)
+			{
+				permutation = neighbour;
+				minimalCost = currentCost;
+			}
 		}
-	} while (whileStop);
-}
-
-float AnnealingSimulation::startTemperature()
-{
-	
+		temperature = temperature*coolingCoefficient;
+		//step++;
+	} while (temperature > 0.1);
+//	std::cout << step << std::endl;
+	//std::cin.get();
+	path = permutation;
+	pathCost = minimalCost;
 }
 
 std::vector<int> AnnealingSimulation::getPermutation()
@@ -59,13 +72,11 @@ std::vector<int> AnnealingSimulation::generateNeighbour(std::vector<int> permuta
 int AnnealingSimulation::calculatePathCost(std::vector<int> permutation)
 {
 	int cost = 0;
-	int currentVert = 0;
-	int nextVert = permutation.at(1);
 	for(int i = 0; i < permutation.size() - 1; i++)
 	{
+		int currentVert = permutation.at(i);
+		int nextVert = permutation.at(i + 1);
 		cost += graph.getGraph()[currentVert][nextVert];
-		currentVert = nextVert;
-		nextVert = permutation.at(i + 2);
 	}
 	cost += graph.getGraph()[permutation.at(permutation.size()-1)][permutation.at(0)];
 	return cost;
@@ -102,13 +113,23 @@ void AnnealingSimulation::setGraph(Graph& givenGraph)
 	graph.setGraphFrag(givenGraph);
 }
 
-int AnnealingSimulation::getTemperatureChangeCoefficient()
+int AnnealingSimulation::getAcceptationCoefficient()
 {
-	return temperatureChangeCoefficient;
+	return acceptationCoefficient;
 }
 
-void AnnealingSimulation::setTemperatureChangeCoefficient(int data)
+void AnnealingSimulation::setAcceptationCoefficient(int data)
 {
-	temperatureChangeCoefficient = data;
+	acceptationCoefficient = data;
+}
+
+float AnnealingSimulation::getCoolingCoefficient()
+{
+	return coolingCoefficient;
+}
+
+void AnnealingSimulation::setCoolingCoefficient(float data)
+{
+	coolingCoefficient = data;
 }
 

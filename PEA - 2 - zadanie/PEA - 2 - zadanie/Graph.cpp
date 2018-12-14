@@ -67,6 +67,44 @@ void Graph::createGiven(string name, int numberOfVerts)
 	plik.close();	 // zamykam plik
 }
 
+void Graph::createGiven(std::string name)
+{
+	ifstream plik; //tworze plik
+	int counter = 0; // inicjuje licznik, który u³atwi wpisywanie danych (bêdzie liczy³ wiersze)
+	plik.open(name, ios::in); //otwieram plik
+	if (plik.good() == true)	//sprawdzam, czy plik otworzyl sie poprawnie
+	{
+		graphReset(); //resetuje graf
+		plik >> vertices;
+		graph = new long int *[vertices];	//tworze tablice wskaznikow, ktorej wielkosc jest rowna ilosci wierzcholkow
+		for (int i = 0; i < vertices; i++)	//tworze wiersze w tablicy wskaznikow, wiersze dlugosci odpowiadajacej ilosci wierzcholkow
+			graph[i] = new long int[vertices];
+
+		for (int i = 0; i < vertices; i++)
+			for (int j = 0; j < vertices; j++)
+				graph[i][j] = 0;		//przypisuje wszystkim komorkom wartosc poczatkowa 0
+
+		while (!plik.eof())
+		{
+			for (int i = 0; i < vertices; i++)
+				plik >> graph[counter][i];	// w pêtli przypisuje wartoœci po kolei do wiersza oznaczonego jako "counter"
+
+			counter++;	//zwiêkszam numer wiersza
+			if (counter >= vertices)  //warunek przekroczenia ilosci danych, jesli plik z danymi by³by Ÿle podany
+				break;
+		}
+	}
+	else
+	{
+		system("cls");
+		cout << "Nie udalo sie otworzyc pliku." << endl;
+		cin.get();
+		cin.get();
+		graphReset(); //resetuje graf
+	}
+	plik.close();	 // zamykam plik
+}
+
 void Graph::clear()
 {
 	for (int i = 0; i < vertices; i++)

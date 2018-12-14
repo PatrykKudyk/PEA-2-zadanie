@@ -9,6 +9,7 @@ public:
 	Graph();
 	~Graph();
 	void createGiven(std::string name, int numberOfVerts);
+	void createGiven(std::string name);
 	void clear();
 	void graphReset();
 	void display();

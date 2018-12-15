@@ -1,5 +1,6 @@
 #include "AnnealingSimulation.h"
 #include <algorithm>
+#include "BranchAndBound.h"
 //#include <iostream>
 
 
@@ -17,7 +18,7 @@ void AnnealingSimulation::simulation()
 	//bool whileStop = false;
 	std::vector<int> permutation = getPermutation();	//inicjalizacja losowej œcie¿ki pocz¹tkowej jako wektora intów
 	float temperature = static_cast<float>(startTemperature);			//obliczenie temperatury startowej
-	//int step = 0;		//inicjalizacja licznika kroków - pocz¹tkowo 0
+//	int step = 0;		//inicjalizacja licznika kroków - pocz¹tkowo 0
 	std::vector<int> bestPath = permutation;
 	int minimalCost = calculatePathCost(permutation);
 	do
@@ -39,9 +40,9 @@ void AnnealingSimulation::simulation()
 			}
 		}
 		temperature = temperature*coolingCoefficient;
-		//step++;
-	} while (temperature > 0.1);
-//	std::cout << step << std::endl;
+	//	step++;
+	} while (temperature > 0.01);
+	//std::cout << step*1618*graph.getVertices() << std::endl;
 	//std::cin.get();
 	path = permutation;
 	pathCost = minimalCost;
@@ -49,10 +50,15 @@ void AnnealingSimulation::simulation()
 
 std::vector<int> AnnealingSimulation::getPermutation()
 {
-	std::vector<int> permutation;	//tworze wektor intów
+	/*std::vector<int> permutation;	//tworze wektor intów
 	for (int i = 0; i < graph.getVertices(); i++)	
 		permutation.push_back(i);					//dodaje wszystkie wierzcholki grafu do wektora
-	std::random_shuffle(permutation.begin(), permutation.end());	//mieszam wszystkie wierzcho³ki
+	std::random_shuffle(permutation.begin(), permutation.end());	//mieszam wszystkie wierzcho³ki*/
+
+	BranchAndBound bround;
+	bround.setGraph(graph);
+	bround.calculatingPath(rand() % graph.getVertices());
+	std::vector<int> permutation = bround.getPath();
 	return permutation;		//zwracam wektor z losowo pomieszanymi wierzcho³kami
 }
 

@@ -141,6 +141,10 @@ void Menu::displayHamilton(int cost, vector<int> path)
 			cout << path[i];	//wypisanie kolejnych wierzcholkow przejscia
 		}
 		cout << endl << endl << "Waga tego cyklu to : " << cost << endl;	//wyswietlenie kosztu najtanszego przejscia
+		if (annealing.getStopActivated())
+			cout << "Jest to najlepszy wynik znaleziony po uplywie " << annealing.getStop() << " s" << endl << "Odnaleziono go po uplywie " << annealing.getTimeBest() << " s." << endl;
+		else
+			cout << "Wynik ten zostal odszukany przed uplywem wyznaczonego czasu, a dokladniej po czasie " << annealing.getTimeBest() << " s." << endl;
 	}
 	else
 		cout << "Graf nie posiada wierzcholkow! Nie posiada tez cyklu hamiltona.";

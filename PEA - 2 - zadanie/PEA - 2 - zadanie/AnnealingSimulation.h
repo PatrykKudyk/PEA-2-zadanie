@@ -9,15 +9,17 @@ class AnnealingSimulation
 	std::vector<int> path;	//vector, który przechowuje kolejne wierzcholki po ktorych przechodzi algorytm
 	int pathCost;	//zmienna, ktora przechowuje najnizszy koszt
 	int acceptationCoefficient;		//wspolczynnik wyzarzania okreslajacy szybkosc zmniejszania sie temperatury
-	int startTemperature;
 	float coolingCoefficient;
 	TimeMeasure timer;
 	int stop;
+	double timeBest;
+	bool stopActivated;
 public:
 	AnnealingSimulation();
 	~AnnealingSimulation();
-	bool whileCheck(int temperature);
+	bool whileCheck(float temperature);
 	void simulation();
+	float temperatureCounting();
 	std::vector<int> getPermutation();
 	std::vector<int> generateNeighbour(std::vector<int> permutation);
 	int calculatePathCost(std::vector<int> permutation);
@@ -33,5 +35,7 @@ public:
 	void setCoolingCoefficient(float data);
 	int getStop();
 	void setStop(int data);
+	double getTimeBest();
+	bool getStopActivated();
 };
 

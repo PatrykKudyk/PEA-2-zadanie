@@ -1,13 +1,11 @@
 #include "AnnealingSimulation.h"
 #include <algorithm>
-#include "BranchAndBound.h"
 #include <iostream>
 //#include <iostream>
 
 
 AnnealingSimulation::AnnealingSimulation()
 {
-	startTemperature = 10;
 	stop = 200;
 }
 
@@ -15,12 +13,13 @@ AnnealingSimulation::~AnnealingSimulation()
 {
 }
 
-bool AnnealingSimulation::whileCheck(int temperature)
+bool AnnealingSimulation::whileCheck(float temperature)
 {
 	double time = timer.getCounter();
 	if (time >= static_cast<double>(stop))
 	{
 		//std::cout << "Czas minal" << std::endl;
+		stopActivated = true;
 		return false;
 	}
 	if (temperature >= 0.01)
@@ -32,12 +31,13 @@ bool AnnealingSimulation::whileCheck(int temperature)
 
 void AnnealingSimulation::simulation()
 {
+	stopActivated = false;
 	timer.startCounting();
 	std::vector<int> permutation = getPermutation();	//inicjalizacja losowej œcie¿ki pocz¹tkowej jako wektora intów
-	float temperature = static_cast<float>(startTemperature);			//obliczenie temperatury startowej
 //	int step = 0;		//inicjalizacja licznika kroków - pocz¹tkowo 0
 	std::vector<int> bestPath = permutation;
 	int minimalCost = calculatePathCost(permutation);
+	float temperature = 47*1.618*minimalCost/2137.0;			//obliczenie temperatury startowej
 	do
 	{
 		
@@ -49,11 +49,13 @@ void AnnealingSimulation::simulation()
 			{
 				permutation = neighbour;
 				minimalCost = currentCost;
+				timeBest = timer.getCounter();
 			}
 			else if(exp(minimalCost-currentCost)/temperature > 0.4747)
 			{
 				permutation = neighbour;
 				minimalCost = currentCost;
+				timeBest = timer.getCounter();
 			}
 		}
 		temperature = temperature*coolingCoefficient;
@@ -71,11 +73,49 @@ std::vector<int> AnnealingSimulation::getPermutation()
 	for (int i = 0; i < graph.getVertices(); i++)	
 		permutation.push_back(i);					//dodaje wszystkie wierzcholki grafu do wektora
 	std::random_shuffle(permutation.begin(), permutation.end());	//mieszam wszystkie wierzcho³ki*/
+	
+	bool loopOn = true;
 
-	BranchAndBound bround;
-	bround.setGraph(graph);
-	bround.calculatingPath(rand()%graph.getVertices());
-	std::vector<int> permutation = bround.getPath();
+	bool *visited = new bool[graph.getVertices()];
+	for (int i = 0; i < graph.getVertices(); i++)
+		visited[i] = false;
+
+	int startVert = rand() % graph.getVertices();
+	visited[startVert] = true; 
+
+	std::vector<int> permutation;
+	permutation.push_back(startVert);
+
+	std::vector<int> vectors;
+	int index;
+	do
+	{
+		vectors.clear();	//usuwam z wektora wszystkie struktury
+		for (int i = 0; i < graph.getVertices(); i++)	//iteruje po wszystkich wierzcho³kach
+			if (visited[i] == false)		//sprawdzam, czy wierzcholek byl juz odwiedzony wczesniej
+				vectors.push_back(i);	//dodaje strukture do wektora
+			
+		//-------ZNALEZIENIE NAJMNIEJSZEGO-------//
+		int minRed = LONG_MAX;	//ustawiam minimalna redukcje na nieskonczonosc
+		index = NULL;		//zeruje index
+		for (int i = 0; i < vectors.size(); i++)		//iteruje po wszystkich wierzcholkach
+			if(startVert != vectors[i])
+				if (graph.getGraph()[startVert][vectors[i]] < minRed)		//sprawdzam czy redukcja chwilowej struktury jest mniejsza niz aktualna najmniejsza 
+				{
+					index = vectors[i];		//zapamietuje index tejze struktury w wektorze
+					minRed = graph.getGraph()[startVert][vectors[i]];	//aktualizuje najmniejsza redukcjê
+				}
+		//---------------------------------------//
+
+		startVert = index;
+		visited[index] = true;
+		permutation.push_back(index);				//aktualizuje chwilow¹ œcie¿kê hamiltona, dla chwilowego kosztu
+		loopOn = false;
+		for (int i = 0; i < graph.getVertices(); i++)
+			if (visited[i] == false)
+				loopOn = true;
+	} while (loopOn);		//pêtla dziz³a dopóki nie zostanie znaleziona œcie¿ka
+	delete[] visited;
 	return permutation;		//zwracam wektor z losowo pomieszanymi wierzcho³kami
 }
 
@@ -164,4 +204,14 @@ int AnnealingSimulation::getStop()
 void AnnealingSimulation::setStop(int data)
 {
 	stop = data;
+}
+
+double AnnealingSimulation::getTimeBest()
+{
+	return timeBest;
+}
+
+bool AnnealingSimulation::getStopActivated()
+{
+	return stopActivated;
 }

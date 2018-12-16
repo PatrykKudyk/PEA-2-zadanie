@@ -145,6 +145,8 @@ void Menu::displayHamilton(int cost, vector<int> path)
 			cout << "Jest to najlepszy wynik znaleziony po uplywie " << annealing.getStop() << " s" << endl << "Odnaleziono go po uplywie " << annealing.getTimeBest() << " s." << endl;
 		else
 			cout << "Wynik ten zostal odszukany przed uplywem wyznaczonego czasu, a dokladniej po czasie " << annealing.getTimeBest() << " s." << endl;
+		cout << "Poczatkowa temperatura wynosila: " << annealing.getTempStart() << endl
+			<< "Koncowa zas wyniosla: " << annealing.getTempEnd() << endl;
 	}
 	else
 		cout << "Graf nie posiada wierzcholkow! Nie posiada tez cyklu hamiltona.";

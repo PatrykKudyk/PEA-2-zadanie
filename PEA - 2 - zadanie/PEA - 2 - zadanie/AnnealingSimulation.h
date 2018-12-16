@@ -8,12 +8,13 @@ class AnnealingSimulation
 	Graph graph;		//graf oraz jego wielkosc (czyli liczba wierzcholkow)
 	std::vector<int> path;	//vector, który przechowuje kolejne wierzcholki po ktorych przechodzi algorytm
 	int pathCost;	//zmienna, ktora przechowuje najnizszy koszt
-	int acceptationCoefficient;		//wspolczynnik wyzarzania okreslajacy szybkosc zmniejszania sie temperatury
 	float coolingCoefficient;
 	TimeMeasure timer;
 	int stop;
 	double timeBest;
 	bool stopActivated;
+	float tempEnd;
+	float tempStart;
 public:
 	AnnealingSimulation();
 	~AnnealingSimulation();
@@ -37,5 +38,7 @@ public:
 	void setStop(int data);
 	double getTimeBest();
 	bool getStopActivated();
+	float getTempEnd();
+	float getTempStart();
 };
 

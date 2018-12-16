@@ -185,6 +185,3 @@ void Graph::setGraphFrag(Graph &obj)
 			graph[i][j] = obj.graph[i][j];
 
 }
-
-
-//do B&B wziac sobie najlepiej best first albo wg³¹b przeszukiwanie grafu

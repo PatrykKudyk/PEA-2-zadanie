@@ -35,27 +35,14 @@ void Menu::mainMenu()
 		case 1:
 			system("cls");
 			fileChoice();
-			//	system("cls");
-			//	graph.display();	//wyswietlenie grafu
-			//	cin.get();			//zabezpieczenie przez zniknieciem danych z konsoli
-			//	cin.get();
 			break;
 		case 2:
 			system("cls");
-			//	graph.display();
-			//	cin.get();
-			//	cin.get();
+			autoStopSetting();
 			break;
 		case 3:
 			system("cls");
-			if (graph.getVertices() != 0)
-			{
-
-			}
-			else
-				cout << "Graf jest pusty, nie mozna przeprowadzic wybranej operacji!" << endl;
-			cin.get();
-			cin.get();
+			
 			break;
 		case 4:
 			system("cls");
@@ -64,9 +51,11 @@ void Menu::mainMenu()
 
 			}
 			else
+			{
 				cout << "Graf jest pusty, nie mozna przeprowadzic wybranej oepracji!" << endl;
-			cin.get();
-			cin.get();
+				cin.get();
+				cin.get();
+			}
 			break;
 		case 5:
 			coefficientSetting();
@@ -89,7 +78,11 @@ void Menu::mainMenu()
 					cin.get();
 				}
 			else
+			{
 				cout << "Graf jest pusty, nie mozna przeprowadzic wybranej oepracji!" << endl;
+				cin.get();
+				cin.get();
+			}
 			break;
 		case 7:
 			progWork = false;
@@ -187,4 +180,13 @@ void Menu::coefficientSetting()
 	cout << "Jaki wspolczynnik zmiany temperatury chcialbys ustawic?" << endl;
 	cin >> number;
 	annealing.setCoolingCoefficient(number);
+}
+
+void Menu::autoStopSetting()
+{
+	int number;
+	cout << "Po jakim czasie chcialbys automatycznie przerwac algorytm?" << endl
+		<< "Czas podaj w sekundach." << endl;
+	cin >> number;
+	annealing.setStop(number);
 }

@@ -1,21 +1,38 @@
 #include "AnnealingSimulation.h"
 #include <algorithm>
 #include "BranchAndBound.h"
+#include <iostream>
 //#include <iostream>
 
 
 AnnealingSimulation::AnnealingSimulation()
 {
 	startTemperature = 10;
+	stop = 200;
 }
 
 AnnealingSimulation::~AnnealingSimulation()
 {
 }
 
+bool AnnealingSimulation::whileCheck(int temperature)
+{
+	double time = timer.getCounter();
+	if (time >= static_cast<double>(stop))
+	{
+		//std::cout << "Czas minal" << std::endl;
+		return false;
+	}
+	if (temperature >= 0.01)
+		return true;
+
+	//std::cout << "Temperatura za niska" << std::endl;
+	return false;
+}
+
 void AnnealingSimulation::simulation()
 {
-	//bool whileStop = false;
+	timer.startCounting();
 	std::vector<int> permutation = getPermutation();	//inicjalizacja losowej œcie¿ki pocz¹tkowej jako wektora intów
 	float temperature = static_cast<float>(startTemperature);			//obliczenie temperatury startowej
 //	int step = 0;		//inicjalizacja licznika kroków - pocz¹tkowo 0
@@ -40,8 +57,8 @@ void AnnealingSimulation::simulation()
 			}
 		}
 		temperature = temperature*coolingCoefficient;
-	//	step++;
-	} while (temperature > 0.01);
+		//	step++;
+	} while (whileCheck(temperature));
 	//std::cout << step*1618*graph.getVertices() << std::endl;
 	//std::cin.get();
 	path = permutation;
@@ -57,7 +74,7 @@ std::vector<int> AnnealingSimulation::getPermutation()
 
 	BranchAndBound bround;
 	bround.setGraph(graph);
-	bround.calculatingPath(rand() % graph.getVertices());
+	bround.calculatingPath(rand()%graph.getVertices());
 	std::vector<int> permutation = bround.getPath();
 	return permutation;		//zwracam wektor z losowo pomieszanymi wierzcho³kami
 }
@@ -84,7 +101,7 @@ int AnnealingSimulation::calculatePathCost(std::vector<int> permutation)
 		int nextVert = permutation.at(i + 1);
 		cost += graph.getGraph()[currentVert][nextVert];
 	}
-	cost += graph.getGraph()[permutation.at(permutation.size()-1)][permutation.at(0)];
+//	cost += graph.getGraph()[permutation.at(permutation.size()-1)][permutation.at(0)];
 	return cost;
 }
 
@@ -139,3 +156,12 @@ void AnnealingSimulation::setCoolingCoefficient(float data)
 	coolingCoefficient = data;
 }
 
+int AnnealingSimulation::getStop()
+{
+	return stop;
+}
+
+void AnnealingSimulation::setStop(int data)
+{
+	stop = data;
+}

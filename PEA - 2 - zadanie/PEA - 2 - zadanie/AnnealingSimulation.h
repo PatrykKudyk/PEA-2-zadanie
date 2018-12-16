@@ -1,6 +1,7 @@
 #pragma once
 #include "Graph.h"
 #include <vector>
+#include "TimeMeasure.h"
 
 class AnnealingSimulation
 {
@@ -10,9 +11,12 @@ class AnnealingSimulation
 	int acceptationCoefficient;		//wspolczynnik wyzarzania okreslajacy szybkosc zmniejszania sie temperatury
 	int startTemperature;
 	float coolingCoefficient;
+	TimeMeasure timer;
+	int stop;
 public:
 	AnnealingSimulation();
 	~AnnealingSimulation();
+	bool whileCheck(int temperature);
 	void simulation();
 	std::vector<int> getPermutation();
 	std::vector<int> generateNeighbour(std::vector<int> permutation);
@@ -27,5 +31,7 @@ public:
 	void setAcceptationCoefficient(int data);
 	float getCoolingCoefficient();
 	void setCoolingCoefficient(float data);
+	int getStop();
+	void setStop(int data);
 };
 

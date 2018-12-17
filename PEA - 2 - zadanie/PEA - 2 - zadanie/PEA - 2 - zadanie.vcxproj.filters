@@ -30,9 +30,6 @@
     <ClCompile Include="TimeMeasure.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BranchAndBound.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graph.h">

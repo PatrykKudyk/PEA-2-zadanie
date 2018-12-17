@@ -112,7 +112,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AnnealingSimulation.cpp" />
-    <ClCompile Include="BranchAndBound.cpp" />
     <ClCompile Include="Graph.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Source.cpp" />

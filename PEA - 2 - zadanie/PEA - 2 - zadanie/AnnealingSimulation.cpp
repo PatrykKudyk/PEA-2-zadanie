@@ -22,11 +22,12 @@ bool AnnealingSimulation::whileCheck(float temperature)
 		stopActivated = true;
 		return false;
 	}
-	if (temperature >= 0.01)
-		return true;
+	return true;
+//	if (temperature >= 0.01)
+	//	return true;
 
 	//std::cout << "Temperatura za niska" << std::endl;
-	return false;
+//	return false;
 }
 
 void AnnealingSimulation::simulation()
@@ -37,8 +38,9 @@ void AnnealingSimulation::simulation()
 //	int step = 0;		//inicjalizacja licznika kroków - pocz¹tkowo 0
 	std::vector<int> bestPath = permutation;
 	int minimalCost = calculatePathCost(permutation);
-	float temperature = 47.0*1.618*minimalCost/2137.0;			//obliczenie temperatury startowej
+	//float temperature = minimalCost / 1.618;			//obliczenie temperatury startowej
 	//tempStart = temperature;
+	float temperature = tempStart;
 	do
 	{
 		
@@ -51,14 +53,14 @@ void AnnealingSimulation::simulation()
 				permutation = neighbour;
 				minimalCost = currentCost;
 				timeBest = timer.getCounter();
-			//	tempEnd = temperature;
+				tempEnd = temperature;
 			}
-			else if(exp((minimalCost-currentCost)/temperature) > 0.4747)
+			else if(exp((float)(minimalCost-currentCost)/temperature) > 0.4747)
 			{
 				permutation = neighbour;
 				minimalCost = currentCost;
 				timeBest = timer.getCounter();
-		//		tempEnd = temperature;
+				tempEnd = temperature;
 			}
 		}
 		temperature = temperature*coolingCoefficient;
@@ -144,7 +146,7 @@ int AnnealingSimulation::calculatePathCost(std::vector<int> permutation)
 		int nextVert = permutation.at(i + 1);
 		cost += graph.getGraph()[currentVert][nextVert];
 	}
-//	cost += graph.getGraph()[permutation.at(permutation.size()-1)][permutation.at(0)];
+	cost += graph.getGraph()[permutation[graph.getVertices() - 1]][permutation[0]];
 	return cost;
 }
 
@@ -217,4 +219,9 @@ float AnnealingSimulation::getTempEnd()
 float AnnealingSimulation::getTempStart()
 {
 	return tempStart;
+}
+
+void AnnealingSimulation::setTempStart(float data)
+{
+	tempStart = data;
 }

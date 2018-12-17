@@ -30,8 +30,6 @@ public:
 	void setPathCost(int gPathCost);
 	Graph getGraph();
 	void setGraph(Graph &givenGraph);	
-	int getAcceptationCoefficient();
-	void setAcceptationCoefficient(int data);
 	float getCoolingCoefficient();
 	void setCoolingCoefficient(float data);
 	int getStop();
@@ -40,5 +38,6 @@ public:
 	bool getStopActivated();
 	float getTempEnd();
 	float getTempStart();
+	void setTempStart(float data);
 };
 

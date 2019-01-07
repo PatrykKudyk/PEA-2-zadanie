@@ -5,6 +5,8 @@ class Graph
 {
 	int vertices; // ilosc wierzcholkow grafu
 	long **graph; //wskaünik na tablice wskaünikÛw
+	int minDistance;
+	int maxDistance;
 public:
 	Graph();
 	~Graph();
@@ -17,5 +19,9 @@ public:
 	void setVertices(int value);
 	long** getGraph();
 	void setGraphFrag(Graph &obj);
+	int getMinDistance();
+	void setMinDistance(int data);
+	int getMaxDistance();
+	void setMaxDistance(int data);
 };
 

@@ -20,10 +20,11 @@ public:
 	~AnnealingSimulation();
 	bool whileCheck(float temperature);
 	void simulation();
-	float temperatureCounting();
 	std::vector<int> getPermutation();
 	std::vector<int> generateNeighbour(std::vector<int> permutation);
 	int calculatePathCost(std::vector<int> permutation);
+	bool checkPropability(int currentCost, int minimalCost, float temperature);
+	float countStartTemp();
 	std::vector<int> getPath();
 	void setPath(std::vector<int> gPath);
 	int getPathCost();

@@ -33,6 +33,8 @@ void Graph::createGiven(string name, int numberOfVerts)
 			for (int j = 0; j < vertices; j++)
 				graph[i][j] = 0;		//przypisuje wszystkim komorkom wartosc poczatkowa 0
 		string elo;
+		minDistance = INT_MAX;
+		maxDistance = 0;
 		while (true)
 		{
 			plik >> elo;
@@ -48,6 +50,13 @@ void Graph::createGiven(string name, int numberOfVerts)
 							iss >> graph[counter][i];
 							if (counter == i)
 								graph[counter][i] = 100000000;
+							else
+							{
+								if (graph[counter][i] > maxDistance)
+									maxDistance = graph[counter][i];
+								if (graph[counter][i] < minDistance)
+									minDistance = graph[counter][i];
+							}
 						}
 					}
 					counter++;	//zwiêkszam numer wiersza
@@ -184,4 +193,24 @@ void Graph::setGraphFrag(Graph &obj)
 		for (int j = 0; j < obj.vertices; j++)
 			graph[i][j] = obj.graph[i][j];
 
+}
+
+int Graph::getMinDistance()
+{
+	return minDistance;
+}
+
+void Graph::setMinDistance(int data)
+{
+	minDistance = data;
+}
+
+int Graph::getMaxDistance()
+{
+	return maxDistance;
+}
+
+void Graph::setMaxDistance(int data)
+{
+	maxDistance = data;
 }

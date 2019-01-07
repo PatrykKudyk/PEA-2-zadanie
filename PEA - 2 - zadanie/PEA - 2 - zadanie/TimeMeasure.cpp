@@ -12,7 +12,6 @@ TimeMeasure::TimeMeasure()
 	CounterStart = 0;
 }
 
-
 TimeMeasure::~TimeMeasure()
 {
 }

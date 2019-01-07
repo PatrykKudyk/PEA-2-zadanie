@@ -1,7 +1,7 @@
 #include "AnnealingSimulation.h"
 #include <algorithm>
 #include <iostream>
-//#include <iostream>
+#include <random>
 
 
 AnnealingSimulation::AnnealingSimulation()
@@ -22,12 +22,12 @@ bool AnnealingSimulation::whileCheck(float temperature)
 		stopActivated = true;
 		return false;
 	}
-	return true;
-//	if (temperature >= 0.01)
-	//	return true;
+
+	if (temperature >= 0.001)
+		return true;
 
 	//std::cout << "Temperatura za niska" << std::endl;
-//	return false;
+	return false;
 }
 
 void AnnealingSimulation::simulation()
@@ -38,9 +38,9 @@ void AnnealingSimulation::simulation()
 //	int step = 0;		//inicjalizacja licznika kroków - pocz¹tkowo 0
 	std::vector<int> bestPath = permutation;
 	int minimalCost = calculatePathCost(permutation);
-	//float temperature = minimalCost / 1.618;			//obliczenie temperatury startowej
-	//tempStart = temperature;
-	float temperature = tempStart;
+	float temperature = countStartTemp();//temperature = minimalCost / 1.618;			//obliczenie temperatury startowej
+	tempStart = temperature;
+	//float temperature = tempStart;
 	do
 	{
 		
@@ -55,7 +55,7 @@ void AnnealingSimulation::simulation()
 				timeBest = timer.getCounter();
 				tempEnd = temperature;
 			}
-			else if(exp((float)(minimalCost-currentCost)/temperature) > 0.4747)
+			else if (checkPropability(currentCost, minimalCost, temperature))
 			{
 				permutation = neighbour;
 				minimalCost = currentCost;
@@ -150,6 +150,22 @@ int AnnealingSimulation::calculatePathCost(std::vector<int> permutation)
 	return cost;
 }
 
+bool AnnealingSimulation::checkPropability(int currentCost, int minimalCost, float temperature)
+{
+	float condition = exp(-1 * static_cast<float>(currentCost - minimalCost) / temperature);
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_real_distribution<> dis(0.0, 1.0);
+	if (dis(gen) < condition)
+		return true;
+	return false;
+}
+
+float AnnealingSimulation::countStartTemp()
+{
+	return fabs((graph.getMaxDistance() - graph.getMinDistance())*graph.getVertices());
+}
+
 std::vector<int> AnnealingSimulation::getPath()
 {
 	return path;
@@ -179,6 +195,8 @@ void AnnealingSimulation::setGraph(Graph& givenGraph)
 {
 	graph.setVertices(givenGraph.getVertices());
 	graph.setGraphFrag(givenGraph);
+	graph.setMaxDistance(givenGraph.getMaxDistance());
+	graph.setMinDistance(givenGraph.getMinDistance());
 }
 
 float AnnealingSimulation::getCoolingCoefficient()
